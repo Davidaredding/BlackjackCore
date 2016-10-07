@@ -11,6 +11,7 @@ namespace BlackJack
             var host = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
+                .UseUrls("http://*:8080")
                 .UseStartup<Startup>()
                 .Build();
 

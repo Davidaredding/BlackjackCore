@@ -6,21 +6,64 @@ namespace BlackJack.Modules
 
     public class TestModule : NancyModule
     {
+        public static Table simpleTable;
+
         public TestModule() : base("/test")
         {
-            Get("/",  parameters => {
-                return "Tests";
-            });
+           Before += (ctx)=> {
+               Console.WriteLine($"Request from IP: {this.Request.UserHostAddress}");
+               
+               return null;
+            };
+
+            Get("/", 
+                _ =>{
+                    return Response.AsFile("index.html","text/html");
+                });
 
             Get("/HandValue", parameters=>{
                 //two new cards
-                var card1 = (Byte)(CardDefinition.King | CardDefinition.Diamond);
-                var card2 = (Byte)(CardDefinition.Ace | CardDefinition.Spade);
+                var card1 = CardDefinition.King | CardDefinition.Diamond;
+                var card2 = CardDefinition.Ace | CardDefinition.Spade;
+                var card3 = CardDefinition.Nine | CardDefinition.Club;
                 var Hand = new Hand();
-                Hand.AddCard(card1);
-                Hand.AddCard(card2);
+                Hand.AddCards(card1,card2,card3);
                 return Hand;
             });
+
+            Get("/Shoe", parameters=>{
+                var shoe = new Shoe(initialize : true);
+                return shoe.Draw();
+            });
+
+            Get("/Table", p=>{
+                TestModule.simpleTable = TestModule.simpleTable??new Table();
+                return TestModule.simpleTable;
+            });
+
+            Get("/Hand", p=>{
+                TestModule.simpleTable = TestModule.simpleTable??new Table();
+                //return $"Card : {simpleTable.Shoe.Draw()}, count: {simpleTable.Shoe.CardsRemaining}";
+                return new {
+                    card = simpleTable.Shoe.Draw(), 
+                    cardCount = simpleTable.Shoe.CardsRemaining
+                    };
+            });
+
+            Get("/User/", p=>{
+                return "";
+            });
+
+            Get("/TableStart", p=>{
+                var playerId = this.Request.UserHostAddress.ToString();
+                TestModule.simpleTable = TestModule.simpleTable??new Table();
+                TestModule.simpleTable.AddPlayer(playerId);
+                TestModule.simpleTable.GetPlayer(playerId).PlaceBet(10);
+                TestModule.simpleTable.StartHand();
+                return TestModule.simpleTable.CurrentPlayer;
+            });
+
+            
         }
     }
 }

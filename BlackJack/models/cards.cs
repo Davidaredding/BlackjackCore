@@ -35,17 +35,19 @@ namespace BlackJack.Models
 
     public class Hand
     {
-        public List<Byte> Cards { get; private set; }
+        public List<CardDefinition> Cards { get; private set; }
         public int Value { get; private set; }
         public Hand ()
         {
-          Cards = new List<Byte>();
+          Cards = new List<CardDefinition>();
         }
 
-        public void AddCard(Byte card)
+        public void AddCards(params CardDefinition[] cards)
         {
-            Cards.Add(card);
-            Value = Hand.CalculateValue(Cards);
+            foreach(var card in cards){
+                Cards.Add(card);
+            }
+            Value = Hand.CalculateValue(Cards.Cast<Byte>().ToList());
         }
 
         //Gets max value less than /equal to 21 
@@ -67,13 +69,51 @@ namespace BlackJack.Models
         
     }
 
-    public class Deck
+    public class Shoe
     {
+
+        private Stack<CardDefinition> cards;
+        private int size = 1;
+
+        public Shoe (int shoeSize = 1, bool initialize = false)
+        {
+            size = shoeSize;
+            if(initialize)
+                Initialize(shoeSize);
+        }
 
         public CardDefinition Draw(int count = 1)
         {
-            return 0;
-        }   
+            return cards.Pop();
+        }
+
+        public void Initialize(int? shoeSize)
+        {
+            shoeSize = shoeSize??this.size;
+
+            cards = new Stack<CardDefinition>();
+
+            for(int singleShoe = 0; singleShoe<shoeSize; singleShoe++)
+            {
+                for(Byte suit = 1; suit <= 8; suit<<=1)
+                {
+                    for(Byte rank = 2; rank<= 14; rank++)
+                    {
+                        var card = (CardDefinition)(suit<<4|rank);
+                        cards.Push(card);
+                    }
+                }
+            }
+            cards = cards.Shuffle();
+        }
+
+        public int CardsRemaining
+        {
+            get
+            {
+                return cards.Count();
+            }
+        }
     }
 
 }
