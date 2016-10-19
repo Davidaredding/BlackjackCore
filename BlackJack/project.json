@@ -12,9 +12,11 @@
                 "Microsoft.AspNetCore.Hosting": "1.0.0",
                 "Microsoft.AspNetCore.Server.Kestrel": "1.0.1",
                 "Microsoft.AspNetCore.Owin": "1.0.0",
-                "System.Collections": "4.0.11",
-                "System.Linq": "4.1.0",
+                "System.Collections": "4.3.0-*",
+                "System.Linq": "4.3.0-*",
                 "Nancy": "2.0.0-barneyrubble",
+                "Microsoft.AspNetCore.SignalR.Server": "0.2.0-*",
+                "Microsoft.AspNetCore.WebSockets": "0.2.0-*",
                 "Microsoft.NETCore.App": {
                     "type": "platform",
                     "version": "1.0.1"

@@ -21,6 +21,7 @@ namespace BlackJack.Modules
 
 
 
+
             Get("/", args => {
                     return View["index"];
                 });

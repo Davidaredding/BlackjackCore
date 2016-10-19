@@ -7,11 +7,12 @@
 -debug:portable
 -nostdlib
 -nologo
-"/Users/dave/Code/net core/hwapp/obj/Debug/netcoreapp1.0/dotnet-compile.assemblyinfo.cs"
--out:"/Users/dave/Code/net core/hwapp/bin/Debug/netcoreapp1.0/hwapp.dll"
+"/Users/dave/Code/net core/RabbitMQ_Test/Receiver/obj/Debug/netcoreapp1.0/dotnet-compile.assemblyinfo.cs"
+-out:"/Users/dave/Code/net core/RabbitMQ_Test/Receiver/bin/Debug/netcoreapp1.0/Receiver.dll"
 -r:"/Users/dave/.nuget/packages/Microsoft.CSharp/4.0.1/ref/netstandard1.0/Microsoft.CSharp.dll"
 -r:"/Users/dave/.nuget/packages/Microsoft.VisualBasic/10.0.1/ref/netstandard1.1/Microsoft.VisualBasic.dll"
 -r:"/Users/dave/.nuget/packages/Microsoft.Win32.Primitives/4.0.1/ref/netstandard1.3/Microsoft.Win32.Primitives.dll"
+-r:"/Users/dave/.nuget/packages/RabbitMQ.Client/4.0.2/lib/netstandard1.5/RabbitMQ.Client.dll"
 -r:"/Users/dave/.nuget/packages/System.AppContext/4.1.0/ref/netstandard1.6/System.AppContext.dll"
 -r:"/Users/dave/.nuget/packages/System.Buffers/4.0.0/lib/netstandard1.1/System.Buffers.dll"
 -r:"/Users/dave/.nuget/packages/System.Collections/4.0.11/ref/netstandard1.3/System.Collections.dll"
@@ -82,4 +83,4 @@
 -r:"/Users/dave/.nuget/packages/System.Threading.Timer/4.0.1/ref/netstandard1.2/System.Threading.Timer.dll"
 -r:"/Users/dave/.nuget/packages/System.Xml.ReaderWriter/4.0.11/ref/netstandard1.3/System.Xml.ReaderWriter.dll"
 -r:"/Users/dave/.nuget/packages/System.Xml.XDocument/4.0.11/ref/netstandard1.3/System.Xml.XDocument.dll"
-"/Users/dave/Code/net core/hwapp/Program.cs"
+"/Users/dave/Code/net core/RabbitMQ_Test/Receiver/Program.cs"

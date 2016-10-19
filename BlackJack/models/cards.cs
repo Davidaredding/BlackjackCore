@@ -18,9 +18,9 @@ namespace BlackJack.Models
               Where val&15 is 14 (an ace), Value =  11
 
       eg:
-      King of Clubs -   00101101
-      Ace of Hearts -   01001110
-      Nine of Diamons - 00011001
+      King of Clubs -   0010 1101
+      Ace of Hearts -   0100 1110
+      Nine of Diamons - 0001 1001
       
     /*****************************/
     [Flags]

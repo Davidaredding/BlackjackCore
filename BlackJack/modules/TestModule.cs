@@ -16,10 +16,7 @@ namespace BlackJack.Modules
                return null;
             };
 
-            Get("/", 
-                _ =>{
-                    return Response.AsFile("index.html","text/html");
-                });
+            
 
             Get("/HandValue", parameters=>{
                 //two new cards
