@@ -1,9 +1,10 @@
-namespace BlackJack.Models
+﻿namespace Cards
 {
+    using Cards.Interfaces;
     using System;
-    using System.Linq;
     using System.Collections.Generic;
-    
+    using System.Linq;
+
     /******* Simple Card Summary**********
      A card is packed into a single byte.  
      This makes storage and manupliation easier while providing the 
@@ -26,25 +27,26 @@ namespace BlackJack.Models
     [Flags]
     public enum CardDefinition : Byte
     {
-     Two = 2, Three = 3, Four = 4, Five = 5,
-     Six = 6, Seven = 7, Eight = 8, Nine = 9,   
-     Ten = 10, Jack = 11, Queen = 12, King = 13,
-     Ace = 14,
-     Diamond = 16, Club = 32, Heart = 64, Spade = 128 
+        Two = 2, Three = 3, Four = 4, Five = 5,
+        Six = 6, Seven = 7, Eight = 8, Nine = 9,
+        Ten = 10, Jack = 11, Queen = 12, King = 13,
+        Ace = 14,
+        Diamond = 16, Club = 32, Heart = 64, Spade = 128
     }
 
-    public class Hand
+    public class Hand : IHand, IComparable<Hand>
     {
         public List<CardDefinition> Cards { get; private set; }
         public int Value { get; private set; }
-        public Hand ()
+        public Hand()
         {
-          Cards = new List<CardDefinition>();
+            Cards = new List<CardDefinition>();
         }
 
         public void AddCards(params CardDefinition[] cards)
         {
-            foreach(var card in cards){
+            foreach (var card in cards)
+            {
                 Cards.Add(card);
             }
             Value = Hand.CalculateValue(Cards.Cast<Byte>().ToList());
@@ -55,30 +57,36 @@ namespace BlackJack.Models
         public static int CalculateValue(List<Byte> cards)
         {
             var val = 0;
-            cards.ForEach(card=>{val +=  (card & 15) != 14 ? Math.Min(card&15, 10): 11;});
+            cards.ForEach(card => { val += (card & 15) != 14 ? Math.Min(card & 15, 10) : 11; });
 
-            if(val>21)
+            if (val > 21)
             {
-                cards.Where(card=> (card & 15) == 14).ToList().ForEach(card=>{
+                cards.Where(card => (card & 15) == 14).ToList().ForEach(card =>
+                {
                     val -= 10;
-                    if(val<=21) return;
+                    if (val <= 21) return;
                 });
             }
             return val;
         }
-        
+
+        public int CompareTo(Hand other)
+        {
+            return CalculateValue(other.Cards.Cast<Byte>().ToList())
+                 - CalculateValue(other.Cards.Cast<Byte>().ToList());
+        }
     }
 
-    public class Shoe
+    public class Shoe : IShoe
     {
 
         private Stack<CardDefinition> cards;
         private int size = 1;
 
-        public Shoe (int shoeSize = 1, bool initialize = false)
+        public Shoe(int shoeSize = 1, bool initialize = false)
         {
             size = shoeSize;
-            if(initialize)
+            if (initialize)
                 Initialize(shoeSize);
         }
 
@@ -89,17 +97,17 @@ namespace BlackJack.Models
 
         public void Initialize(int? shoeSize)
         {
-            shoeSize = shoeSize??this.size;
+            shoeSize = shoeSize ?? this.size;
 
             cards = new Stack<CardDefinition>();
 
-            for(int singleShoe = 0; singleShoe<shoeSize; singleShoe++)
+            for (int singleShoe = 0; singleShoe < shoeSize; singleShoe++)
             {
-                for(Byte suit = 1; suit <= 8; suit<<=1)
+                for (Byte suit = 1; suit <= 8; suit <<= 1)
                 {
-                    for(Byte rank = 2; rank<= 14; rank++)
+                    for (Byte rank = 2; rank <= 14; rank++)
                     {
-                        var card = (CardDefinition)(suit<<4|rank);
+                        var card = (CardDefinition)(suit << 4 | rank);
                         cards.Push(card);
                     }
                 }
@@ -116,20 +124,23 @@ namespace BlackJack.Models
         }
     }
 
-    public static Stack<CardDefinition> Shuffle(this Stack<CardDefinition> cards)
+    public static class Extensions
     {
-        var c = cards.ToArray();
-        cards.Clear();
-        var rnd = new Random();
-
-        for (int i = c.Length - 1; i > 1; i--)
+        public static Stack<CardDefinition> Shuffle(this Stack<CardDefinition> cards)
         {
-            var position = rnd.Next(i);
-            var card_2 = c[position];
+            var c = cards.ToArray();
+            cards.Clear();
+            var rnd = new Random();
 
-            c[position] = c[i];
-            c[i] = card_2;
+            for (int i = c.Length - 1; i > 1; i--)
+            {
+                var position = rnd.Next(i);
+                var card_2 = c[position];
+
+                c[position] = c[i];
+                c[i] = card_2;
+            }
+            return new Stack<CardDefinition>(c);
         }
-        return new Stack<CardDefinition>(c);
     }
 }
